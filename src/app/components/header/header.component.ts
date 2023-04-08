@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +10,24 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class HeaderComponent {
   searchForm: FormGroup;
 
-  constructor() {
+  constructor(
+    private usersServices: UsersService
+  ) {
     this.searchForm = new FormGroup({
       name: new FormControl()
     })
 
   }
 
-  getData(): void {
-    console.log(this.searchForm.value)
+  async getData(): Promise<void> {
+
+    try {
+      console.log(this.searchForm.value.name)
+      const response = await this.usersServices.getUsersByName(this.searchForm.value.name)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
+
 }
